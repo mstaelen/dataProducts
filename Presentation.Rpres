@@ -1,0 +1,62 @@
+European reserves by country
+========================================================
+author: Matthieu
+date: 
+
+
+
+========================================================
+The datasource is provide by : www.data.gouv.fr
+
+This data include 
+- 28 countries
+- during 14 years (2000-03-31 to 2014-03-31)
+
+
+data's preparation
+========================================================
+I transformed the sources (Excel format to csv) before work with it. because I need to use a external library and I'm not sure to be used it on all provider.
+
+but if you would like to used the original data you can used 
+```{r}
+library(gdata)
+````
+with this methods
+```r
+con <- xls2csv("european-reserves-by-country.xls")
+data <- read.csv2(summary(con)$description)
+file.remove(summary(con)$description)
+
+or read.xlsx
+```
+
+Option to used the app
+=======================================================
+you have two options :
+- see the evolution for all period
+- select a period 
+
+
+
+Result with the app.
+========================================================
+you can see the gold's reserve of a country, during a period. 
+by example : Evolution of the French reserve during 2 years 2005 to 2007
+
+Summary
+```{r,echo=FALSE}
+library(ggplot2)
+data  <- read.csv2("european-reserves-by-country.csv",sep=",")
+data$date <- as.Date(data$date)
+filter <- data$date> as.Date("2005-01-01") & data$date < as.Date("2007-01-01") 
+useDataFilter <- data[filter,c("date","France")]
+summary(useDataFilter)
+````
+Result with the app.
+========================================================
+Graph result.
+
+````{r,echo=FALSE}
+qplot(x=date,y=France,data=useDataFilter)
+```
+
